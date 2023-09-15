@@ -1,0 +1,24 @@
+---
+// TODO: Create backend for fetching blogs.
+// const blogs = await fetch("TODO").then((res) => res.json());
+import AlbumViewLayout from "../../layouts/AlbumViewLayout.astro";
+
+const blogs = [
+  {
+    id: 1,
+    name: "Blog 1",
+    description: "This is blog 1",
+    date: "2021-01-01",
+  },
+  {
+    id: 2,
+    name: "Blog 2",
+    description: "This is blog 2",
+    date: "2021-01-02",
+  },
+];
+
+export { blogs };
+---
+
+<AlbumViewLayout items={blogs} title="Blogs" />

@@ -1,0 +1,25 @@
+---
+const { href } = Astro.props;
+const { pathname } = Astro.url;
+const isActive = href === pathname || href === pathname.replace(/\/$/, "");
+---
+
+<div class="flex-auto contents text-center text-slate-950 dark:text-slate-50">
+  {
+    isActive ? (
+      <a
+        href={href}
+        class="grow p-1 rounded-lg bg-opacity-90 bg-stone-50 dark:bg-stone-950 dark:bg-opacity-80 hover:bg-stone-500 hover:bg-opacity-80"
+      >
+        <slot />
+      </a>
+    ) : (
+      <a
+        href={href}
+        class="grow p-1 rounded-lg bg-stone-200 bg-opacity-90 dark:bg-stone-800 dark:bg-opacity-80 hover:bg-stone-500 hover:bg-opacity-80"
+      >
+        <slot />
+      </a>
+    )
+  }
+</div>
