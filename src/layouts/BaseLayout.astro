@@ -40,7 +40,11 @@ window.localStorage.setItem("theme", theme);
     </style>
   </head>
   <body>
-    <div class="box dark:bg-opacity-70 dark:bg-black h-screen">
+    <div
+      class="box dark:bg-opacity-70 dark:bg-black h-screen
+      [&_*]:font-mono
+      [&_h1]:text-3xl [&_h1]:font-bold"
+    >
       <div class="flex flex-col w-full mx-auto">
         <Header />
         <div class="flex-auto">
