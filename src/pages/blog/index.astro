@@ -16,7 +16,7 @@ const blogs = [
     description: "This is blog 2",
     date: "2021-01-02",
   },
-];
+].sort((a, b) => (a.date > b.date ? -1 : 1));
 
 export { blogs };
 ---
