@@ -1,0 +1,79 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: odin-rune
+  labels:
+    app: odin-rune
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odin-rune
+  template:
+    metadata:
+      labels:
+        app: odin-rune
+    spec:
+      containers:
+        - name: odin-rune
+          image: houstonbova/odin-rune
+          ports:
+            - name: web
+              containerPort: 4321
+      imagePullSecrets:
+        - name: regcred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: odin-rune
+
+spec:
+  ports:
+    - name: web
+      port: 80
+      targetPort: web
+
+  selector:
+    app: odin-rune
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: authentik
+spec:
+  forwardAuth:
+    address: http://ak-outpost-odinrune.default.svc.cluster.local:9000/outpost.goauthentik.io/auth/traefik
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-authentik-username
+      - X-authentik-groups
+      - X-authentik-email
+      - X-authentik-name
+      - X-authentik-uid
+      - X-authentik-jwt
+      - X-authentik-meta-jwks
+      - X-authentik-meta-outpost
+      - X-authentik-meta-provider
+      - X-authentik-meta-app
+      - X-authentik-meta-version
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: odin-rune-route
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`odinrune.xyz`)
+      middlewares:
+        - name: authentik
+      kind: Rule
+      services:
+        - name: odin-rune
+          port: web
